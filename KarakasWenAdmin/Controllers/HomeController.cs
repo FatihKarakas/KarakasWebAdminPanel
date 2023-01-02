@@ -17,13 +17,13 @@ namespace KarakasWenAdmin.Controllers
 
         public IActionResult Index()
         {
-            UserControl userControl = karakasContext.UserControl.FirstOrDefault();
+            List<UserControl> userControl = karakasContext.UserControl.ToList();
             if(userControl != null)
             {
-                 var test = userControl.IsActive;
+                return View(userControl);
             }
-            
-            return View(userControl);
+
+            return RedirectToAction("Error");
         }
 
         public IActionResult Privacy()

@@ -1,12 +1,40 @@
-﻿@model KarakasWenAdmin.Models.Entitys.UserControl;
+﻿@using KarakasWenAdmin.Models.Entitys
+@model List<UserControl>
 @{
     ViewData["Title"] = "Home Page";
+    string Durum(bool durum)
+    {
+        string s = durum == true ? "Aktif" : "Pasif";
+        return s;
+    }
 }
 
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 
-    <h1 class="text-center">@Model.FullName</h1>
+<div class="text-center">
+  
+    <table class="table table-striped table-bordered table-hover">
+        <thead>
+            <tr>
+                <td>Adı Soyadı</td>
+                <td>E Mail Adresi</td>
+                <td>Kullanıcı Adı</td>
+                <td>Son Giriş</td>
+                <td>Durum</td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                <td>@item.FullName</td>
+                <td>@item.emailAddresss</td>
+                <td>@item.UserName</td>
+                <td>@item.LastActivityDate</td>
+                <td>@Durum(item.IsActive)<i class="fa fa-item"></i></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
 </div>
