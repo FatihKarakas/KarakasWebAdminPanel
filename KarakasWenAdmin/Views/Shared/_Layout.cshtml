@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Fatih KARAKAŞ Portal için İçerik Yömetim Sayfası</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-     <link href="~/lib/font-awesome/css/all.min.css" rel="stylesheet" />
+    <link href="~/lib/font-awesome/css/all.min.css" rel="stylesheet" />
+    <link href="~/lib/toastrjs/toastr.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/KarakasWenAdmin.styles.css" asp-append-version="true" />
 </head>
@@ -26,20 +27,20 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
-                        @if(User.Identity.IsAuthenticated)
+                        @if (User.Identity.IsAuthenticated)
                         {
-                             <li class="nav-item ms-auto">
+                            <li class="nav-item ms-auto">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="UserAccount" asp-action="Profile">
                                     <i class="fa-solid fa-user me-2"></i>@User.FindFirst("TamAd").Value
                                 </a>
                             </li>
                             <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="UserAccount" asp-action="Logout">Çıkış Yap</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="UserAccount" asp-action="Logout">Çıkış Yap</a>
                             </li>
                         }
                         else
                         {
-                              <li class="nav-item ms-auto">
+                            <li class="nav-item ms-auto">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="UserAccount" asp-action="Login"><i class="fa-solid fa-right-to-bracket me-2"></i>Login</a>
                             </li>
                         }
@@ -62,6 +63,7 @@
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+      <script src="~/lib/toastrjs/toastr.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

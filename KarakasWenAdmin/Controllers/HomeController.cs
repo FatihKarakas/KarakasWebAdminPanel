@@ -21,7 +21,9 @@ namespace KarakasWenAdmin.Controllers
             List<UserControl> userControl = karakasContext.UserControl.ToList();
             List<Mesajlar> posts = karakasContext.Mesajlar.ToList();
             List<Post> gonderiler = karakasContext.Post.ToList();
-            if(userControl != null)
+            var mesaj = TempData["result"] == null ? string.Empty : TempData["result"];
+            ViewData["result"] = mesaj;
+            if (userControl != null)
             {
                 return View(userControl);
             }
