@@ -18,6 +18,8 @@ namespace KarakasWenAdmin.Controllers
         public IActionResult Index()
         {
             List<UserControl> userControl = karakasContext.UserControl.ToList();
+            List<Mesajlar> posts = karakasContext.Mesajlar.ToList();
+            List<Post> gonderiler = karakasContext.Post.ToList();
             if(userControl != null)
             {
                 return View(userControl);
