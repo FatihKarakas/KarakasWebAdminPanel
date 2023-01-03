@@ -50,12 +50,13 @@ namespace KarakasWenAdmin.Controllers
                     ClaimsPrincipal principal = new ClaimsPrincipal(identity);
 
                     HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+                    TempData["result"] = "GirisOk";
 
                     return RedirectToAction("Index", "Home");
                 }
                 else
                 {
-                    ModelState.AddModelError("", "Username or password is incorrect.");
+                    ModelState.AddModelError("", "Kullanıcı Adınız veya Parolanız hatalı.");
                 }
             }
             return View();
