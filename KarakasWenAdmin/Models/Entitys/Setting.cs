@@ -1,4 +1,4 @@
-﻿namespace KarakasWenAdmin.Models
+﻿namespace KarakasWenAdmin.Models.Entitys
 {
     public class Setting
     {

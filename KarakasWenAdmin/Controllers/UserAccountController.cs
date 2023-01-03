@@ -1,18 +1,89 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using KarakasWenAdmin.Models;
+using KarakasWenAdmin.Models.Entitys;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace KarakasWenAdmin.Controllers
 {
+   
     public class UserAccountController : Controller
     {
+        private readonly KarakasContext _karakasContext;
+        public UserAccountController(KarakasContext karakasContext)
+        {
+            _karakasContext = karakasContext;
+        }
+
         [AllowAnonymous]
         public IActionResult Login()
         {
             return View();
         }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public IActionResult Login(UserControl userControl)
+        {
+            if(ModelState.IsValid)
+            {
+                UserControl users = _karakasContext.UserControl.SingleOrDefault(x => x.UserName.ToLower() == userControl.UserName.ToLower() && x.Password == userControl.Password);
+                if (users != null)
+                {
+                    if (!users.IsActive)
+                    {
+                        ModelState.AddModelError(nameof(userControl.UserName), "Kullanıcı Hesabaınız Pasif edilmiş. Yöneticiniz ile görüşünüz!!");
+                        return View(userControl);
+                    }
+
+                    List<Claim> claims = new List<Claim>();
+                    claims.Add(new Claim(ClaimTypes.NameIdentifier, users.Id.ToString()));
+                    claims.Add(new Claim(ClaimTypes.Name, users.FullName ?? string.Empty));
+                    claims.Add(new Claim(ClaimTypes.Role, users.Role));
+                    claims.Add(new Claim("Username", users.UserName));
+                    claims.Add(new Claim("TamAd", users.FullName ?? ""));
+
+                    ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                    ClaimsPrincipal principal = new ClaimsPrincipal(identity);
+
+                    HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Username or password is incorrect.");
+                }
+            }
+            return View();
+        }
         public IActionResult Index()
         {
             return View();
+        }
+
+        public IActionResult Logout()
+        {
+            HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction(nameof(Login));
+        }
+
+
+        public IActionResult Profile()
+        {
+            ProfileInfoLoader();
+            return View();
+        }
+
+        private void ProfileInfoLoader()
+        {
+            int userid = Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            UserControl user = _karakasContext.UserControl.SingleOrDefault(x => x.Id == userid);
+
+            ViewData["FullName"] = user.FullName;
         }
     }
 }
