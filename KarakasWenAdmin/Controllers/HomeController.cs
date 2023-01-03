@@ -1,5 +1,6 @@
 ﻿using KarakasWenAdmin.Models;
 using KarakasWenAdmin.Models.Entitys;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -14,10 +15,12 @@ namespace KarakasWenAdmin.Controllers
             _logger = logger;
             this.karakasContext = karakasContext;
         }
-
+        [Authorize(Roles = "Admin")]
         public IActionResult Index()
         {
             List<UserControl> userControl = karakasContext.UserControl.ToList();
+            List<Mesajlar> posts = karakasContext.Mesajlar.ToList();
+            List<Post> gonderiler = karakasContext.Post.ToList();
             if(userControl != null)
             {
                 return View(userControl);
@@ -36,5 +39,12 @@ namespace KarakasWenAdmin.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        [AllowAnonymous]
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
+
     }
 }
