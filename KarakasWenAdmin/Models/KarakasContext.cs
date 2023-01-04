@@ -15,7 +15,7 @@ namespace KarakasWenAdmin.Models
         public DbSet<Comment> Comment { get; set; }   
         public DbSet<Mesajlar> Mesajlar { get; set; } 
         public DbSet<Hakkimda> Hakkimda { get; set; } 
-        //public DbSet<Referanslar> Referanslar { get; set; }
+        public DbSet<Referanslar> Referanslar { get; set; }
         public DbSet<Setting> Setting { get; set; }
         public DbSet<SystemError> SystemErrors { get; set; }
 
