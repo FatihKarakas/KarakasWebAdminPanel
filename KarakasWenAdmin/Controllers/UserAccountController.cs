@@ -29,7 +29,7 @@ namespace KarakasWenAdmin.Controllers
         {
             if(ModelState.IsValid)
             {
-                UserControl users = _karakasContext.UserControl.SingleOrDefault(x => x.UserName.ToLower() == userControl.UserName.ToLower() && x.Password == userControl.Password);
+                UserControl? users = _karakasContext.UserControl.SingleOrDefault(x => x.UserName.ToLower() == userControl.UserName.ToLower() && x.Password == userControl.Password);
                 if (users != null)
                 {
                     if (!users.IsActive)
@@ -82,9 +82,9 @@ namespace KarakasWenAdmin.Controllers
         private void ProfileInfoLoader()
         {
             int userid = Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            UserControl user = _karakasContext.UserControl.SingleOrDefault(x => x.Id == userid);
+            UserControl? user = _karakasContext.UserControl.SingleOrDefault(x => x.Id == userid);
 
-            ViewData["FullName"] = user.FullName;
+            ViewData["FullName"] = user==null?string.Empty:user.FullName;
         }
     }
 }
