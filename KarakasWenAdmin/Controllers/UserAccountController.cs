@@ -34,7 +34,7 @@ namespace KarakasWenAdmin.Controllers
                 {
                     if (!users.IsActive)
                     {
-                        ModelState.AddModelError(nameof(userControl.UserName), "Kullanıcı Hesabaınız Pasif edilmiş. Yöneticiniz ile görüşünüz!!");
+                        ModelState.AddModelError(nameof(userControl.UserName), "Kullanıcı Hesabınız Pasif edilmiş. Yöneticiniz ile görüşünüz!!");
                         return View(userControl);
                     }
 
