@@ -35,7 +35,7 @@
             <td><a href="@item.LinUrl" target="_blank" >@item.LinUrl</a></td>
             <td>@Durum(item.Yayinda)</td>
             <td>
-                <a class="btn btn-warning btn-group-sm" asp-controller="Refaranslarim" asp-action="Edit" asp-route-Id="@item.Id" >
+                <a class="btn btn-warning btn-sm" asp-controller="Refaranslarim" asp-action="Edit" asp-route-Id="@item.Id" >
                 <i class="fa fa-edit"></i>
             </a>
                 <button class="btn btn-sm btn-danger">
@@ -47,4 +47,16 @@
       
     </tbody>
 </table>
+
+@section Scripts{
+    @if (ViewData["result"] != "")
+    {
+        <script>
+            toastr["success"]("Güncelleme İşlemei tamamlandı", "Güncelleme Tamamlandı");
+        </script>
+    }
+}
+
+
+
 

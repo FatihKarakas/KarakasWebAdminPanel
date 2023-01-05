@@ -2,10 +2,12 @@
 using KarakasWenAdmin.Models.Entitys;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
 namespace KarakasWenAdmin.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -16,21 +18,44 @@ namespace KarakasWenAdmin.Controllers
             this.karakasContext = karakasContext;
         }
         [Authorize(Roles = "Admin")]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            List<UserControl> userControl = karakasContext.UserControl.ToList();
-            List<Mesajlar> posts = karakasContext.Mesajlar.ToList();
-            List<Post> gonderiler = karakasContext.Post.ToList();
+            List<Post> gonderiler = await karakasContext.Post.Include("Category").ToListAsync();
             var mesaj = TempData["result"] == null ? string.Empty : TempData["result"];
             ViewData["result"] = mesaj;
-            if (userControl != null)
+            if (gonderiler != null)
             {
-                return View(userControl);
+                return View(gonderiler);
             }
 
             return RedirectToAction("Error");
         }
 
+        public async Task<IActionResult> Edit(string Id)
+        {
+
+            Post gonderi = await karakasContext.Post.SingleAsync(xy => xy.Id == Convert.ToInt32(Id));
+            if (gonderi == null)
+            {
+                return NotFound();
+            }
+            return View(gonderi);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Edit(Post post)
+        {
+            if (ModelState.IsValid)
+            {
+
+                 return View(nameof(Index));    
+            }
+            else
+            {
+              return RedirectToAction("Error");
+            }
+           
+        }
+        [AllowAnonymous]
         public IActionResult Privacy()
         {
             return View();
