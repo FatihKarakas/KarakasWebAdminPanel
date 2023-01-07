@@ -20,7 +20,10 @@ namespace KarakasWenAdmin.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
-            List<Post> gonderiler = await karakasContext.Post.Include("Category").ToListAsync();
+            List<Post> gonderiler = await karakasContext.Post
+                .Include("Category")
+                .Include("Comment")
+                .ToListAsync();
             var mesaj = TempData["result"] == null ? string.Empty : TempData["result"];
             ViewData["result"] = mesaj;
             if (gonderiler != null)
